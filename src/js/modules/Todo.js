@@ -41,6 +41,18 @@ export default class Todo {
     this.parent.removeOneById(this.id);
   }
 
+  _edit () {
+    this.el.querySelector('.editable').innerHTML = `
+    <input type="text" class="validate" value="${this.content}"/>
+    `;
+    this._activateBtns();
+  }
+
+  _validate () {
+    this.content = this.el.querySelector('.validate').value;
+    this.el.querySelector('.editable').innerHTML = this.content;
+    this._activateBtns();
+  }
 /**
  * Activation des éléments interactifs du Todo
  */
@@ -52,6 +64,18 @@ export default class Todo {
     // Activation des .destroy
     this.el.querySelector('.destroy').onclick = () => {
       this._destroy();
+    }
+    // Activation des .editable
+    this.el.querySelector('.editable').ondblclick = () => {
+      this._edit();
+    }
+    // Activation des .validate
+    if (this.el.querySelector('.validate')) {
+    this.el.querySelector('.validate').onkeyup = (e) => {
+      if (e.keyCode === 13) {
+          this._validate();
+        }
+      }
     }
   }
 }
