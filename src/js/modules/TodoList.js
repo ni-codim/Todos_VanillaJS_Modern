@@ -71,12 +71,25 @@ export default class TodoList {
    * Suppression de tous les todos.completed
    */
 
-  removeAllCompleted () {
+  _removeAllCompleted () {
     // Supprimer les todo.completed de this.todos
     this.todos = this.todos.filter(function (todo) {
       return !todo.completed;
     });
     this.render(this.todos);
+  }
+
+/**
+ * Complete all todos notCompleted
+ */
+
+  _completeAll () {
+    const notCompleted = this.todos.filter(function (todo) {
+      return !todo.completed;
+    });
+    for (let todo of notCompleted) {
+      todo._toggleCompleted();
+    }
   }
 
   /**
@@ -106,7 +119,7 @@ export default class TodoList {
    * Activation des éléments interactifs de la TodoList
    * @return {[type]} [description]
    */
-  activateBtns () {
+   activateBtns () {
     // Activation de l'input .new-todo
     this.el.querySelector('.new-todo').onkeyup = (e) => {
       if (e.keyCode === 13) {
@@ -122,7 +135,11 @@ export default class TodoList {
     }
     // Activation du .clear-completed
     this.el.querySelector('.clear-completed').onclick = () => {
-      this.removeAllCompleted();
+      this._removeAllCompleted();
+    };
+    // Activation du .toggle-all
+    this.el.querySelector('.toggle-all').onclick = () => {
+      this._completeAll();
     };
   }
 }
