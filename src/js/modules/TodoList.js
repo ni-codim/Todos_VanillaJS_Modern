@@ -55,6 +55,19 @@ export default class TodoList {
     this.setNotCompletedNumber();
   }
 
+/**
+ * Suppression d'une Todo par son id
+ * @param {[type]} id [description]
+ * @return {[type]} [description]
+ */
+  removeOneById (id) {
+    this.todos = this.todos.filter(function(todo){
+      return todo.id !== id;
+    });
+    this.setNotCompletedNumber();
+  }
+
+
   /**
    * Activation des éléments interactifs de la TodoList
    * @return {[type]} [description]
