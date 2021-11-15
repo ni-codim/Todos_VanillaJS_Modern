@@ -9,7 +9,7 @@ export default class TodoList {
     this.todos = [];
     this.loadTodos(data.todos);
     this.template = todoListTemplate;
-    this.render();
+    this.render(this.todos);
   }
   loadTodos (todos) {
     for (let todo of todos) {
@@ -20,12 +20,12 @@ export default class TodoList {
    * Rendu du TodoList
    * @return {[return]} [description]
    */
-  render () {
+  render (todos) {
     this.el.innerHTML = this.template;
     // Le DOM de la liste existe pour le navigateur
     this.listEl = this.el.querySelector('.todo-list');
     // Rendu des todos
-    for (let todo of this.todos) {
+    for (let todo of todos) {
       todo.render();
     }
     // Calcule du nombre de todos not completed
@@ -67,6 +67,23 @@ export default class TodoList {
     this.setNotCompletedNumber();
   }
 
+  _filter (filter) {
+    switch (filter) {
+      case 'active':
+        this.render(this.todos.filter(function (todo) {
+          return !todo.completed;
+        }));
+        break;
+      case 'completed':
+        this.render(this.todos.filter(function (todo) {
+          return todo.completed;
+        }));
+        break;
+      default:
+      this.render(this.todos);
+    }
+  }
+
 
   /**
    * Activation des éléments interactifs de la TodoList
@@ -79,5 +96,12 @@ export default class TodoList {
         this.addTodo();
       }
     };
+    // Activation des .filter
+    const filterBtns = this.el.querySelectorAll('.filter');
+    for (let filterBtn of filterBtns) {
+      filterBtn.onclick = () => {
+        this._filter(filterBtn.dataset.filter);
+      }
+    }
   }
 }
